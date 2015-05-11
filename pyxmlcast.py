@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from lxml import etree
 
 class PyXMLCast(object):
@@ -22,14 +25,20 @@ class PyXMLCast(object):
                 'title':item.find('title').text,
                 'description':item.find('itunes:summary',namespaces={
                     'itunes':'http://www.itunes.com/dtds/podcast-1.0.dtd'
-                }).text
+                }).text,
+                'length':item.find('itunes:duration',namespaces={
+                    'itunes':'http://www.itunes.com/dtds/podcast-1.0.dtd'
+                }).text,
+                'author':item.find('itunes:author',namespaces={
+                    'itunes':'http://www.itunes.com/dtds/podcast-1.0.dtd'
+                }).text,
+                'pubdate':item.find('pubDate').text
             }
 
             if item.find('magnet') is not None:
-                video['magnet'] = item.find('magnet').text
-
-            if item.find('enclosure') is not None:
-                video['enclosure'] = item.find('enclosure').attrib['url']
+                video['url'] = item.find('magnet').text
+            else:
+                video['url'] = item.find('enclosure').attrib['url']
 
             videos += [video]
 
